@@ -1,8 +1,8 @@
-name: Android CI
+name: Android CI - Ultimate Optimization
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, ci-optimize-combined ]
   pull_request:
     branches: [ main, master ]
 
@@ -25,46 +25,82 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      with:
-        api-level: 33
-        build-tools: 33.0.2
-        ndk-version: 25.2.9519653
+    - name: Setup Android SDK (Optimized)
+      run: |
+        chmod +x .github/scripts/setup-android-sdk.sh
+        ./.github/scripts/setup-android-sdk.sh
     
-    - name: Cache Gradle packages
+    - name: Enhanced Gradle and Android Build Cache
       uses: actions/cache@v4
       with:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          ~/.gradle/configuration-cache
+          ~/.gradle/kotlin-dsl
+          ~/.gradle/build-cache
+          .gradle/caches
+          .gradle/wrapper
+          .gradle/configuration-cache
+          .gradle/kotlin-dsl
+          .gradle/build-cache
+          ~/.android/build-cache
+          .android/build-cache
+        key: ${{ runner.os }}-gradle-enhanced-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle.properties', '**/*.kt', '**/*.java') }}
         restore-keys: |
+          ${{ runner.os }}-gradle-enhanced-
           ${{ runner.os }}-gradle-
     
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     
-    - name: Build with Gradle
-      run: ./gradlew assembleDebug
+    - name: Warm up Gradle daemon and pre-compile
+      run: |
+        ./gradlew help --daemon --build-cache --configuration-cache
+        ./gradlew compileDebugKotlin --build-cache --configuration-cache --daemon
     
-    - name: Upload APK artifact
+    - name: Build with Gradle (Ultimate Performance)
+      run: |
+        ./gradlew assembleDebug \
+          --parallel \
+          --build-cache \
+          --daemon \
+          --configuration-cache \
+          --max-workers=4 \
+          --gradle-user-home ~/.gradle \
+          -Dorg.gradle.jvmargs="-Xmx4096m -XX:+UseG1GC -XX:+UseStringDeduplication" \
+          -Dkotlin.compiler.execution.strategy=in-process \
+          -Dkotlin.incremental=true \
+          -Pandroid.enableR8.fullMode=true \
+          -Pandroid.enableBuildCache=true
+    
+    - name: Upload APK artifact (Compressed)
       uses: actions/upload-artifact@v4
       with:
-        name: NoteMaster-APK
+        name: NoteMaster-APK-Ultimate-${{ github.run_number }}
         path: app/build/outputs/apk/debug/NoteMaster-*.apk
         retention-days: 30
+        compression-level: 9
     
     - name: Create Release
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ci-optimize-combined'
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v2.0.${{ github.run_number }}
-        name: NoteMaster v2.0.${{ github.run_number }} - Professional UI Release
+        tag_name: v2.0.${{ github.run_number }}-ultimate
+        name: NoteMaster v2.0.${{ github.run_number }} - Ultimate Optimized Build
         body: |
-          🎨 **NoteMaster v2.0 - Professional UI Release**
+          🚀 **NoteMaster v2.0 - Ultimate Optimized Build**
           
-          **New Features:**
+          **Performance Optimizations Applied:**
+          - ⚡ Enhanced Gradle build cache with configuration cache
+          - 🛠️ Optimized Android SDK setup (pre-installed components)
+          - 🔧 Ultimate Gradle performance flags and JVM tuning
+          - 📦 Compressed artifact upload (level 9)
+          - 🏗️ Multi-worker parallel builds (max 4 workers)
+          - 💾 Comprehensive caching strategy (Gradle + Android build cache)
+          - 🚀 Pre-compilation and daemon warm-up optimizations
+          
+          **Features:**
           - 🌟 Completely redesigned professional UI with modern dialogs
           - 📝 Enhanced note creation with styled input fields and labels
           - 🎯 Beautiful note details view with category badges
@@ -75,8 +111,9 @@ jobs:
           
           **Technical Details:**
           - Built from commit ${{ github.sha }}
-          - Version: 2.0
+          - Version: 2.0 Ultimate
           - Generated on ${{ github.event.head_commit.timestamp }}
+          - Build optimizations: All applied
         files: app/build/outputs/apk/debug/NoteMaster-*.apk
         draft: false
         prerelease: false

@@ -492,7 +492,7 @@ class MainActivity : AppCompatActivity() {
             setTextColor(Color.parseColor("#4A4A4A"))
             setPadding(20, 16, 20, 16)
             setBackgroundColor(Color.WHITE)
-            lineSpacing = 4f, 1.2f
+            setLineSpacing(4f, 1.2f)
         }
         
         contentScrollView.addView(contentView)

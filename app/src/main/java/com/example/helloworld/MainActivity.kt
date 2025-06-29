@@ -254,40 +254,157 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
     
+    private fun showStyledToast(message: String, color: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    
+    private fun createStyledButton(text: String, colorHex: String, onClick: () -> Unit): TextView {
+        return TextView(this).apply {
+            this.text = text
+            textSize = 14f
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.parseColor(colorHex))
+            setPadding(20, 12, 20, 12)
+            gravity = Gravity.CENTER
+            setTypeface(null, Typeface.BOLD)
+            isClickable = true
+            isFocusable = true
+            
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(8, 0, 8, 0)
+            layoutParams = params
+            
+            setOnClickListener { onClick() }
+        }
+    }
+    
     private fun showCreateNoteDialog() {
         val dialogLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(32, 32, 32, 32)
+            setPadding(40, 32, 40, 32)
+            setBackgroundColor(Color.parseColor("#FEFBF3"))
+        }
+        
+        // Dialog title
+        val dialogTitle = TextView(this).apply {
+            text = "✏️ Create New Note"
+            textSize = 24f
+            setTextColor(Color.parseColor("#2D2A26"))
+            setTypeface(null, Typeface.BOLD)
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, 24)
+        }
+        
+        // Title input with label
+        val titleLabel = TextView(this).apply {
+            text = "Title (Optional)"
+            textSize = 14f
+            setTextColor(Color.parseColor("#6B6459"))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, 0, 0, 8)
         }
         
         val titleInput = EditText(this).apply {
-            hint = "Note title (optional)"
+            hint = "Enter a title for your note..."
             textSize = 16f
-            setPadding(16, 16, 16, 16)
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.parseColor("#2D2A26"))
+            setHintTextColor(Color.parseColor("#999999"))
+        }
+        
+        // Content input with label
+        val contentLabel = TextView(this).apply {
+            text = "Content *"
+            textSize = 14f
+            setTextColor(Color.parseColor("#6B6459"))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, 16, 0, 8)
         }
         
         val contentInput = EditText(this).apply {
-            hint = "Write your note here..."
+            hint = "What's on your mind?"
             textSize = 16f
-            setPadding(16, 16, 16, 16)
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.parseColor("#2D2A26"))
+            setHintTextColor(Color.parseColor("#999999"))
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
             minLines = 4
+            maxLines = 8
+        }
+        
+        // Category input with label
+        val categoryLabel = TextView(this).apply {
+            text = "Category"
+            textSize = 14f
+            setTextColor(Color.parseColor("#6B6459"))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, 16, 0, 8)
         }
         
         val categoryInput = EditText(this).apply {
-            hint = "Category (Personal, Work, Study, Creative, Ideas, Tasks)"
+            hint = "Personal, Work, Study, Creative, Ideas, Tasks"
             textSize = 16f
-            setPadding(16, 16, 16, 16)
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.parseColor("#2D2A26"))
+            setHintTextColor(Color.parseColor("#999999"))
         }
         
+        dialogLayout.addView(dialogTitle)
+        dialogLayout.addView(titleLabel)
         dialogLayout.addView(titleInput)
+        dialogLayout.addView(contentLabel)
         dialogLayout.addView(contentInput)
+        dialogLayout.addView(categoryLabel)
         dialogLayout.addView(categoryInput)
         
-        AlertDialog.Builder(this)
-            .setTitle("Create New Note")
+        val dialog = AlertDialog.Builder(this)
             .setView(dialogLayout)
-            .setPositiveButton("Save") { _, _ ->
+            .setCancelable(true)
+            .create()
+        
+        // Custom buttons layout
+        val buttonLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 24, 0, 0)
+            gravity = Gravity.END
+        }
+        
+        val cancelButton = TextView(this).apply {
+            text = "Cancel"
+            textSize = 16f
+            setTextColor(Color.parseColor("#6B6459"))
+            setPadding(24, 16, 24, 16)
+            gravity = Gravity.CENTER
+            isClickable = true
+            isFocusable = true
+            setOnClickListener { dialog.dismiss() }
+        }
+        
+        val saveButton = TextView(this).apply {
+            text = "💾 Save Note"
+            textSize = 16f
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.parseColor("#E67E22"))
+            setPadding(32, 16, 32, 16)
+            gravity = Gravity.CENTER
+            setTypeface(null, Typeface.BOLD)
+            isClickable = true
+            isFocusable = true
+            
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(16, 0, 0, 0)
+            layoutParams = params
+            
+            setOnClickListener {
                 val title = titleInput.text.toString().trim()
                 val content = contentInput.text.toString().trim()
                 val category = categoryInput.text.toString().trim().ifEmpty { "Personal" }
@@ -303,105 +420,248 @@ class MainActivity : AppCompatActivity() {
                     )
                     allNotes.add(0, newNote)
                     refreshNotesList()
-                    showToast("Note created successfully!")
+                    showStyledToast("✅ Note created successfully!", "#27AE60")
+                    dialog.dismiss()
                 } else {
-                    showToast("Please enter some content for your note")
+                    showStyledToast("⚠️ Please enter some content for your note", "#E74C3C")
                 }
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+        
+        buttonLayout.addView(cancelButton)
+        buttonLayout.addView(saveButton)
+        dialogLayout.addView(buttonLayout)
+        
+        dialog.show()
     }
     
     private fun showNoteDetailsDialog(note: Note) {
         val dialogLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(32, 32, 32, 32)
+            setPadding(40, 32, 40, 32)
+            setBackgroundColor(Color.parseColor("#FEFBF3"))
         }
+        
+        // Note header with category badge
+        val headerLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, 0, 0, 20)
+        }
+        
+        val categoryBadge = TextView(this).apply {
+            text = "${note.getCategoryEmoji()} ${note.category}"
+            textSize = 12f
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.parseColor(note.getCategoryColor()))
+            setPadding(12, 6, 12, 6)
+            setTypeface(null, Typeface.BOLD)
+            gravity = Gravity.CENTER
+        }
+        
+        val dateView = TextView(this).apply {
+            text = "📅 ${android.text.format.DateFormat.format("MMM dd, yyyy", note.createdAt)}"
+            textSize = 12f
+            setTextColor(Color.parseColor("#999999"))
+            setPadding(16, 0, 0, 0)
+        }
+        
+        headerLayout.addView(categoryBadge)
+        headerLayout.addView(dateView)
         
         val titleView = TextView(this).apply {
             text = note.getDisplayTitle()
-            textSize = 20f
+            textSize = 22f
             setTextColor(Color.parseColor("#2D2A26"))
             setTypeface(null, Typeface.BOLD)
             setPadding(0, 0, 0, 16)
+            gravity = Gravity.START
         }
         
-        val categoryView = TextView(this).apply {
-            text = "${note.getCategoryEmoji()} ${note.category}"
-            textSize = 14f
-            setTextColor(Color.parseColor(note.getCategoryColor()))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, 0, 0, 16)
+        val contentScrollView = ScrollView(this).apply {
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                300 // Fixed height for scrollable content
+            )
+            layoutParams = params
         }
         
         val contentView = TextView(this).apply {
             text = note.content
             textSize = 16f
-            setTextColor(Color.parseColor("#6B6459"))
-            setPadding(0, 0, 0, 16)
+            setTextColor(Color.parseColor("#4A4A4A"))
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            lineSpacing = 4f, 1.2f
         }
         
-        val dateView = TextView(this).apply {
-            text = "Created: ${note.createdAt}"
-            textSize = 12f
-            setTextColor(Color.parseColor("#999999"))
-        }
+        contentScrollView.addView(contentView)
         
+        dialogLayout.addView(headerLayout)
         dialogLayout.addView(titleView)
-        dialogLayout.addView(categoryView)
-        dialogLayout.addView(contentView)
-        dialogLayout.addView(dateView)
+        dialogLayout.addView(contentScrollView)
         
-        AlertDialog.Builder(this)
-            .setTitle("Note Details")
+        val dialog = AlertDialog.Builder(this)
             .setView(dialogLayout)
-            .setPositiveButton("Edit") { _, _ ->
-                showEditNoteDialog(note)
-            }
-            .setNegativeButton("Delete") { _, _ ->
-                deleteNote(note)
-            }
-            .setNeutralButton("Close", null)
-            .show()
+            .setCancelable(true)
+            .create()
+        
+        // Custom action buttons
+        val actionLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 24, 0, 0)
+            gravity = Gravity.CENTER
+        }
+        
+        val editButton = createStyledButton("✏️ Edit", "#3498DB") {
+            dialog.dismiss()
+            showEditNoteDialog(note)
+        }
+        
+        val deleteButton = createStyledButton("🗑️ Delete", "#E74C3C") {
+            dialog.dismiss()
+            deleteNote(note)
+        }
+        
+        val closeButton = createStyledButton("Close", "#95A5A6") {
+            dialog.dismiss()
+        }
+        
+        actionLayout.addView(editButton)
+        actionLayout.addView(deleteButton)
+        actionLayout.addView(closeButton)
+        dialogLayout.addView(actionLayout)
+        
+        dialog.show()
     }
     
     private fun showEditNoteDialog(note: Note) {
         val dialogLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(32, 32, 32, 32)
+            setPadding(40, 32, 40, 32)
+            setBackgroundColor(Color.parseColor("#FEFBF3"))
+        }
+        
+        // Dialog title with emoji
+        val dialogTitle = TextView(this).apply {
+            text = "✏️ Edit Note"
+            textSize = 24f
+            setTextColor(Color.parseColor("#2D2A26"))
+            setTypeface(null, Typeface.BOLD)
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, 24)
+        }
+        
+        // Title input with enhanced styling
+        val titleLabel = TextView(this).apply {
+            text = "Title (Optional)"
+            textSize = 14f
+            setTextColor(Color.parseColor("#6B6459"))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, 0, 0, 8)
         }
         
         val titleInput = EditText(this).apply {
             setText(note.title)
-            hint = "Note title (optional)"
+            hint = "Enter a title for your note..."
             textSize = 16f
-            setPadding(16, 16, 16, 16)
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.parseColor("#2D2A26"))
+            setHintTextColor(Color.parseColor("#999999"))
+        }
+        
+        // Content input with enhanced styling
+        val contentLabel = TextView(this).apply {
+            text = "Content *"
+            textSize = 14f
+            setTextColor(Color.parseColor("#6B6459"))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, 16, 0, 8)
         }
         
         val contentInput = EditText(this).apply {
             setText(note.content)
-            hint = "Write your note here..."
+            hint = "What's on your mind?"
             textSize = 16f
-            setPadding(16, 16, 16, 16)
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.parseColor("#2D2A26"))
+            setHintTextColor(Color.parseColor("#999999"))
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
             minLines = 4
+            maxLines = 8
+        }
+        
+        // Category input with enhanced styling
+        val categoryLabel = TextView(this).apply {
+            text = "Category"
+            textSize = 14f
+            setTextColor(Color.parseColor("#6B6459"))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, 16, 0, 8)
         }
         
         val categoryInput = EditText(this).apply {
             setText(note.category)
-            hint = "Category (Personal, Work, Study, Creative, Ideas, Tasks)"
+            hint = "Personal, Work, Study, Creative, Ideas, Tasks"
             textSize = 16f
-            setPadding(16, 16, 16, 16)
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.parseColor("#2D2A26"))
+            setHintTextColor(Color.parseColor("#999999"))
         }
         
+        dialogLayout.addView(dialogTitle)
+        dialogLayout.addView(titleLabel)
         dialogLayout.addView(titleInput)
+        dialogLayout.addView(contentLabel)
         dialogLayout.addView(contentInput)
+        dialogLayout.addView(categoryLabel)
         dialogLayout.addView(categoryInput)
         
-        AlertDialog.Builder(this)
-            .setTitle("Edit Note")
+        val dialog = AlertDialog.Builder(this)
             .setView(dialogLayout)
-            .setPositiveButton("Save") { _, _ ->
+            .setCancelable(true)
+            .create()
+        
+        // Custom buttons layout
+        val buttonLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 24, 0, 0)
+            gravity = Gravity.END
+        }
+        
+        val cancelButton = TextView(this).apply {
+            text = "Cancel"
+            textSize = 16f
+            setTextColor(Color.parseColor("#6B6459"))
+            setPadding(24, 16, 24, 16)
+            gravity = Gravity.CENTER
+            isClickable = true
+            isFocusable = true
+            setOnClickListener { dialog.dismiss() }
+        }
+        
+        val updateButton = TextView(this).apply {
+            text = "🔄 Update Note"
+            textSize = 16f
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.parseColor("#3498DB"))
+            setPadding(32, 16, 32, 16)
+            gravity = Gravity.CENTER
+            setTypeface(null, Typeface.BOLD)
+            isClickable = true
+            isFocusable = true
+            
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(16, 0, 0, 0)
+            layoutParams = params
+            
+            setOnClickListener {
                 val title = titleInput.text.toString().trim()
                 val content = contentInput.text.toString().trim()
                 val category = categoryInput.text.toString().trim().ifEmpty { "Personal" }
@@ -417,14 +677,20 @@ class MainActivity : AppCompatActivity() {
                     if (index != -1) {
                         allNotes[index] = updatedNote
                         refreshNotesList()
-                        showToast("Note updated successfully!")
+                        showStyledToast("✅ Note updated successfully!", "#27AE60")
+                        dialog.dismiss()
                     }
                 } else {
-                    showToast("Please enter some content for your note")
+                    showStyledToast("⚠️ Please enter some content for your note", "#E74C3C")
                 }
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+        
+        buttonLayout.addView(cancelButton)
+        buttonLayout.addView(updateButton)
+        dialogLayout.addView(buttonLayout)
+        
+        dialog.show()
     }
     
     private fun deleteNote(note: Note) {
@@ -468,23 +734,104 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun showSearchDialog() {
-        val searchInput = EditText(this).apply {
-            hint = "Search notes..."
-            textSize = 16f
-            setPadding(16, 16, 16, 16)
+        val dialogLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(40, 32, 40, 32)
+            setBackgroundColor(Color.parseColor("#FEFBF3"))
         }
         
-        AlertDialog.Builder(this)
-            .setTitle("Search Notes")
-            .setView(searchInput)
-            .setPositiveButton("Search") { _, _ ->
+        // Dialog title with search emoji
+        val dialogTitle = TextView(this).apply {
+            text = "🔍 Search Notes"
+            textSize = 24f
+            setTextColor(Color.parseColor("#2D2A26"))
+            setTypeface(null, Typeface.BOLD)
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, 24)
+        }
+        
+        val searchLabel = TextView(this).apply {
+            text = "Search in titles and content"
+            textSize = 14f
+            setTextColor(Color.parseColor("#6B6459"))
+            setPadding(0, 0, 0, 8)
+        }
+        
+        val searchInput = EditText(this).apply {
+            hint = "Enter keywords to search..."
+            textSize = 16f
+            setPadding(20, 16, 20, 16)
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.parseColor("#2D2A26"))
+            setHintTextColor(Color.parseColor("#999999"))
+        }
+        
+        dialogLayout.addView(dialogTitle)
+        dialogLayout.addView(searchLabel)
+        dialogLayout.addView(searchInput)
+        
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogLayout)
+            .setCancelable(true)
+            .create()
+        
+        // Custom buttons layout
+        val buttonLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, 24, 0, 0)
+            gravity = Gravity.END
+        }
+        
+        val clearButton = TextView(this).apply {
+            text = "🆑 Clear"
+            textSize = 16f
+            setTextColor(Color.parseColor("#6B6459"))
+            setPadding(24, 16, 24, 16)
+            gravity = Gravity.CENTER
+            isClickable = true
+            isFocusable = true
+            setOnClickListener {
+                searchQuery = ""
+                currentFilter = null
+                refreshNotesList()
+                showStyledToast("📝 Showing all notes", "#3498DB")
+                dialog.dismiss()
+            }
+        }
+        
+        val searchButton = TextView(this).apply {
+            text = "🔍 Search"
+            textSize = 16f
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.parseColor("#16A085"))
+            setPadding(32, 16, 32, 16)
+            gravity = Gravity.CENTER
+            setTypeface(null, Typeface.BOLD)
+            isClickable = true
+            isFocusable = true
+            
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(16, 0, 0, 0)
+            layoutParams = params
+            
+            setOnClickListener {
                 searchQuery = searchInput.text.toString().trim()
                 currentFilter = null
                 refreshNotesList()
-                showToast(if (searchQuery.isEmpty()) "Showing all notes" else "Searching for: $searchQuery")
+                val message = if (searchQuery.isEmpty()) "📝 Showing all notes" else "🔍 Searching for: $searchQuery"
+                showStyledToast(message, "#16A085")
+                dialog.dismiss()
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+        
+        buttonLayout.addView(clearButton)
+        buttonLayout.addView(searchButton)
+        dialogLayout.addView(buttonLayout)
+        
+        dialog.show()
     }
     
     private fun refreshNotesList() {

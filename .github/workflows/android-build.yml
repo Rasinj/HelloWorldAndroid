@@ -51,23 +51,33 @@ jobs:
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: android-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        name: NoteMaster-APK
+        path: app/build/outputs/apk/debug/NoteMaster-*.apk
         retention-days: 30
     
     - name: Create Release
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v${{ github.run_number }}
-        name: Release v${{ github.run_number }}
+        tag_name: v2.0.${{ github.run_number }}
+        name: NoteMaster v2.0.${{ github.run_number }} - Professional UI Release
         body: |
-          Automated release of Android APK
+          🎨 **NoteMaster v2.0 - Professional UI Release**
           
-          **Changes:**
+          **New Features:**
+          - 🌟 Completely redesigned professional UI with modern dialogs
+          - 📝 Enhanced note creation with styled input fields and labels
+          - 🎯 Beautiful note details view with category badges
+          - ✏️ Improved edit dialog with better typography and spacing
+          - 🔍 Enhanced search interface with clear/search actions
+          - 🎨 Professional color scheme and visual hierarchy
+          - 📱 Optimized spacing and padding for better user experience
+          
+          **Technical Details:**
           - Built from commit ${{ github.sha }}
+          - Version: 2.0
           - Generated on ${{ github.event.head_commit.timestamp }}
-        files: app/build/outputs/apk/debug/app-debug.apk
+        files: app/build/outputs/apk/debug/NoteMaster-*.apk
         draft: false
         prerelease: false
         make_latest: true

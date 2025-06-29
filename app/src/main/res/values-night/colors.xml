@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Dark Theme Colors -->
-    <color name="background_primary">#121212</color>
-    <color name="background_secondary">#1E1E1E</color>
+    <!-- Dark Theme - Warm & Cozy Night Mode for Note-Taking -->
     
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B3B3B3</color>
+    <!-- Primary Background Colors -->
+    <color name="background_primary">#1A1611</color>         <!-- Dark warm brown -->
+    <color name="background_secondary">#211E18</color>       <!-- Slightly lighter brown -->
+    <color name="background_tertiary">#2A251D</color>        <!-- Medium brown -->
     
-    <color name="accent_primary">#818CF8</color>
-    <color name="accent_secondary">#A78BFA</color>
+    <!-- Text Colors -->
+    <color name="text_primary">#F5F1E8</color>               <!-- Warm white -->
+    <color name="text_secondary">#D4CFC4</color>             <!-- Light warm beige -->
+    <color name="text_tertiary">#B8B3A8</color>              <!-- Medium warm gray -->
+    <color name="text_hint">#8B8278</color>                  <!-- Dark warm gray -->
     
-    <color name="card_background">#1E1E1E</color>
-    <color name="card_stroke">#2E2E2E</color>
+    <!-- Accent Colors for Note Categories (darker versions) -->
+    <color name="accent_primary">#F39C12</color>             <!-- Brighter warm orange -->
+    <color name="accent_secondary">#E67E22</color>           <!-- Orange -->
+    <color name="accent_success">#2ECC71</color>             <!-- Bright green -->
+    <color name="accent_info">#5DADE2</color>                <!-- Light blue -->
+    <color name="accent_warning">#F1C40F</color>             <!-- Bright yellow -->
+    <color name="accent_danger">#EC7063</color>              <!-- Light coral -->
+    
+    <!-- Card and Surface Colors -->
+    <color name="card_background">#2A251D</color>            <!-- Dark brown cards -->
+    <color name="card_background_alt">#241F17</color>        <!-- Darker alternative -->
+    <color name="card_stroke">#3D362A</color>                <!-- Brown border -->
+    <color name="card_shadow">#33000000</color>              <!-- Darker shadow -->
+    
+    <!-- Note Category Colors (enhanced for dark mode) -->
+    <color name="category_personal">#BB8FCE</color>          <!-- Light purple -->
+    <color name="category_work">#5DADE2</color>              <!-- Light blue -->
+    <color name="category_study">#52C3A4</color>             <!-- Light teal -->
+    <color name="category_creative">#F48FB1</color>          <!-- Light pink -->
+    <color name="category_ideas">#FFB74D</color>             <!-- Light orange -->
+    <color name="category_tasks">#A1887F</color>             <!-- Light brown -->
+    
+    <!-- Interactive States -->
+    <color name="button_primary">#F39C12</color>             <!-- Bright orange -->
+    <color name="button_primary_pressed">#E67E22</color>     <!-- Darker orange -->
+    <color name="button_secondary">#3D362A</color>           <!-- Dark brown -->
+    <color name="button_text_primary">#1A1611</color>        <!-- Dark text on bright -->
+    <color name="button_text_secondary">#F5F1E8</color>      <!-- Light text on dark -->
+    
+    <!-- Status Colors (enhanced for dark mode) -->
+    <color name="status_success">#58D68D</color>             <!-- Bright green -->
+    <color name="status_error">#EC7063</color>               <!-- Light red -->
+    <color name="status_warning">#F4D03F</color>             <!-- Bright yellow -->
+    <color name="status_info">#5DADE2</color>                <!-- Light blue -->
 </resources>

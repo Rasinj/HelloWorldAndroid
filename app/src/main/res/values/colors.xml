@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Light Theme Colors -->
-    <color name="background_primary">#FAFAFA</color>
-    <color name="background_secondary">#FFFFFF</color>
+    <!-- Note-Taking App Color Palette - Warm & Productive -->
     
-    <color name="text_primary">#1F1F1F</color>
-    <color name="text_secondary">#757575</color>
+    <!-- Primary Background Colors -->
+    <color name="background_primary">#FEFBF3</color>        <!-- Warm cream -->
+    <color name="background_secondary">#FFFFFF</color>       <!-- Pure white -->
+    <color name="background_tertiary">#F8F5ED</color>        <!-- Light warm beige -->
     
-    <color name="accent_primary">#6366F1</color>
-    <color name="accent_secondary">#8B5CF6</color>
+    <!-- Text Colors -->
+    <color name="text_primary">#2D2A26</color>               <!-- Dark warm brown -->
+    <color name="text_secondary">#6B6459</color>             <!-- Medium warm gray -->
+    <color name="text_tertiary">#8B8278</color>              <!-- Light warm gray -->
+    <color name="text_hint">#B5B0A8</color>                  <!-- Very light warm gray -->
     
-    <color name="card_background">#FFFFFF</color>
-    <color name="card_stroke">#E0E0E0</color>
+    <!-- Accent Colors for Note Categories -->
+    <color name="accent_primary">#E67E22</color>             <!-- Warm orange -->
+    <color name="accent_secondary">#D68910</color>           <!-- Golden yellow -->
+    <color name="accent_success">#27AE60</color>             <!-- Forest green -->
+    <color name="accent_info">#3498DB</color>                <!-- Sky blue -->
+    <color name="accent_warning">#F39C12</color>             <!-- Amber -->
+    <color name="accent_danger">#E74C3C</color>              <!-- Coral red -->
     
-    <!-- Material Design Colors -->
+    <!-- Card and Surface Colors -->
+    <color name="card_background">#FFFFFF</color>            <!-- White cards -->
+    <color name="card_background_alt">#FDF6E8</color>        <!-- Warm white alternative -->
+    <color name="card_stroke">#E8E2D5</color>                <!-- Warm border -->
+    <color name="card_shadow">#1A1A1A1A</color>              <!-- Subtle shadow -->
+    
+    <!-- Note Category Colors -->
+    <color name="category_personal">#8E44AD</color>          <!-- Amethyst purple -->
+    <color name="category_work">#2980B9</color>              <!-- Business blue -->
+    <color name="category_study">#16A085</color>             <!-- Teal green -->
+    <color name="category_creative">#E91E63</color>          <!-- Pink -->
+    <color name="category_ideas">#FF9800</color>             <!-- Orange -->
+    <color name="category_tasks">#795548</color>             <!-- Brown -->
+    
+    <!-- Interactive States -->
+    <color name="button_primary">#E67E22</color>             <!-- Primary action -->
+    <color name="button_primary_pressed">#D5690F</color>     <!-- Pressed state -->
+    <color name="button_secondary">#ECF0F1</color>           <!-- Secondary action -->
+    <color name="button_text_primary">#FFFFFF</color>        <!-- White text on primary -->
+    <color name="button_text_secondary">#2D2A26</color>      <!-- Dark text on secondary -->
+    
+    <!-- Status Colors -->
+    <color name="status_success">#2ECC71</color>             <!-- Success green -->
+    <color name="status_error">#E74C3C</color>               <!-- Error red -->
+    <color name="status_warning">#F1C40F</color>             <!-- Warning yellow -->
+    <color name="status_info">#3498DB</color>                <!-- Info blue -->
+    
+    <!-- Material Design Base Colors (for compatibility) -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
